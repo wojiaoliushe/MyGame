@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="MyGame"
-run/main_scene="res://main.tscn"
+run/main_scene="uid://cdfqefysrhl2a"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/ZzSprite/plugin.cfg")
 
 [physics]
 

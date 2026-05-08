@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://ci03vq3jw3a3y"]
+
+[ext_resource type="Script" uid="uid://cpoleaxe001gd1" path="res://scripts/weapons/poleaxe.gd" id="1_poleaxe_gd"]
+[ext_resource type="Texture2D" path="res://assets/generated/pixel_poleaxe_128.png" id="2_poleaxe_tex"]
+
+[sub_resource type="RectangleShape2D" id="Poleaxe_blade_shape"]
+size = Vector2(96, 96)
+
+[node name="Poleaxe" type="Node2D"]
+script = ExtResource("1_poleaxe_gd")
+
+[node name="Blade" type="Sprite2D" parent="."]
+texture = ExtResource("2_poleaxe_tex")
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("Poleaxe_blade_shape")
+
+[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]

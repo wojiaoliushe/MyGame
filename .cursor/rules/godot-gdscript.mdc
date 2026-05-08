@@ -1,0 +1,42 @@
+---
+description: 本仓库 Godot 4.x GDScript 与场景协作约定（与 Cursor 编辑一致）
+globs: **/*.gd
+alwaysApply: false
+---
+
+# Godot / GDScript（本仓库）
+
+项目为 **Godot 4.6**（以 `project.godot` 中 `config/features` 为准）。在 `*.gd` 中的修改应对齐现有风格。
+
+## 目录约定
+
+- **`scenes/`**：仅放 **`.tscn`**（如 `scenes/main.tscn`、`scenes/player/player.tscn`、`scenes/weapons/`、`scenes/ui/` 等）。
+- **`scripts/`**：仅放 **`.gd`**（与场景同主题的子目录：`scripts/weapons/`、`scripts/ui/`、`scripts/enemies/`、`scripts/projectiles/` 等）。
+- 主场景入口由 `project.godot` 的 `run/main_scene` 指向 **`res://scenes/main.tscn`**。
+
+## 语言与类型
+
+- 使用 **GDScript 2.x** 语法：`func foo() -> void:`、变量与返回值在合理处标注类型（`var x: int`、`-> bool` 等）。
+- 已有 `class_name` 的脚本保持其公共 API 稳定；新增 `class_name` 需避免与引擎或本项目中已有类名冲突。
+
+## 命名与结构
+
+- **文件名、函数名、变量名**：`snake_case`。
+- **类名**（`class_name`）：`PascalCase`。
+- **信号**：过去时或完成体短语，如 `health_changed`。
+- 节点引用优先 **`@onready var name: Type = $Path`**；复杂路径用 `@onready` 子变量，避免在 `_physics_process` 里反复 `get_node`。
+
+## Godot 习惯
+
+- 可移动角色逻辑放在 `_physics_process` 中与 `move_and_slide()` 等配合；不要无故混用 `_process` 做本应用物理移动，除非现有代码已如此。
+- 解耦优先用 **信号** 或小组件，避免过深的节点路径硬编码。
+- 资源路径一律 **`res://`**，不要使用依赖本机盘符的绝对路径。
+
+## 纹理与贴图
+
+- 贴图、精灵等资源放在项目既有目录（如 **`res://assets/`** 下子目录），与现有场景、脚本中的引用保持一致。
+- 为 `Sprite2D` / `TextureRect` 等设置纹理时，注意 **纹理过滤**、缩放与像素风格是否与场景一致。
+
+## 注释
+
+- 与现有文件一致：关键行为、非显然的计时/无敌帧/索敌等用简短中文注释即可；不为显而易见的一行代码写长文注释。
