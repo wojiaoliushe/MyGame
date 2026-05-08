@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://bcfucktbys0pa"]
+
+[ext_resource type="Script" uid="uid://cww3jfap8h2rc" path="res://weapon/sword.gd" id="1_sword_gd"]
+[ext_resource type="Texture2D" uid="uid://clwf41rhuc4ho" path="res://assets/generated/pixel_sword_frame_0.png" id="2_sword_tex"]
+
+[sub_resource type="RectangleShape2D" id="Sword_blade_shape"]
+size = Vector2(119, 22)
+
+[node name="Sword" type="Node2D" unique_id=661198984]
+script = ExtResource("1_sword_gd")
+
+[node name="Blade" type="Sprite2D" parent="." unique_id=1516429518]
+position = Vector2(1.5, 2.0000029)
+scale = Vector2(0.9765625, 0.953125)
+texture = ExtResource("2_sword_tex")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=815595494]
+collision_layer = 0
+collision_mask = 2
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=953812848]
+position = Vector2(0, 1)
+shape = SubResource("Sword_blade_shape")
+
+[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]

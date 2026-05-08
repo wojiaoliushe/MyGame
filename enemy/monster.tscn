@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://d1g2xnvy0tbao"]
+
+[ext_resource type="Script" uid="uid://byrrg1rvakcat" path="res://enemy/monster.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://ewppbb52w28o" path="res://assets/generated/small_monster_frame_0.png" id="2_texture"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1"]
+radius = 16.0
+
+[node name="Monster" type="CharacterBody2D" unique_id=531325251]
+collision_layer = 2
+collision_mask = 3
+script = ExtResource("1_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=654582652]
+texture = ExtResource("2_texture")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=845397249]
+shape = SubResource("CircleShape2D_1")
