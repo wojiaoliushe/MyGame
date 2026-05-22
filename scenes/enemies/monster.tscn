@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://ewppbb52w28o" path="res://assets/generated/small_monster_frame_0.png" id="2_texture"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
-radius = 16.0
+radius = 34.56
 
 [node name="Monster" type="CharacterBody2D" unique_id=531325251]
 collision_layer = 2

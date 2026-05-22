@@ -1,12 +1,12 @@
-extends MeleeWeapon
+extends SlashWeapon
 class_name Poleaxe
 
-@export var swing_arc_deg: float = 90.0
-@export var swing_duration: float = 0.22
+@export var swing_arc_deg: float = 240.0
+@export var swing_duration: float = 0.4
 ## 相对贴图矩形多扩一圈碰撞，减少漏判
 @export var hitbox_padding_px: float = 14.0
 ## 作为持有者子节点时，自动索敌攻击的间隔（秒）
-@export var check_interval: float = 1.0
+@export var check_interval: float = 2.0
 @export var auto_attack_enabled: bool = true
 ## 斧刃贴图相对挥击枢轴的水平偏移（与剑 blade_extend_x 含义一致）
 @export var blade_extend_x: float = 30.0

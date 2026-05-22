@@ -1,4 +1,4 @@
-extends MeleeWeapon
+extends SlashWeapon
 class_name Sword
 
 @export var swing_arc_deg: float = 90.0

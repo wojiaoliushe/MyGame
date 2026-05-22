@@ -73,6 +73,10 @@ text = "添加火球"
 unique_name_in_owner = true
 text = "添加长柄斧"
 
+[node name="BtnAddSpear" type="Button" parent="Overlay/Center/Panel/Margin/VBox/RowAddRemove"]
+unique_name_in_owner = true
+text = "添加长矛"
+
 [node name="BtnResume" type="Button" parent="Overlay/Center/Panel/Margin/VBox"]
 unique_name_in_owner = true
 text = "继续游戏"

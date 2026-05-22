@@ -3,6 +3,7 @@ class_name WeaponPauseMenu
 
 const _SWORD_SCENE: PackedScene = preload("res://scenes/weapons/sword.tscn")
 const _POLEAXE_SCENE: PackedScene = preload("res://scenes/weapons/poleaxe.tscn")
+const _SPEAR_SCENE: PackedScene = preload("res://scenes/weapons/spear.tscn")
 const _FIRE_BALL_SCENE: PackedScene = preload("res://scenes/weapons/fire_ball.tscn")
 
 @export var player_path: NodePath = NodePath("../Player")
@@ -12,6 +13,7 @@ const _FIRE_BALL_SCENE: PackedScene = preload("res://scenes/weapons/fire_ball.ts
 @onready var _btn_add_sword: Button = %BtnAddSword
 @onready var _btn_add_fireball: Button = %BtnAddFireBall
 @onready var _btn_add_poleaxe: Button = %BtnAddPoleaxe
+@onready var _btn_add_spear: Button = %BtnAddSpear
 @onready var _btn_resume: Button = %BtnResume
 
 func _ready() -> void:
@@ -22,6 +24,7 @@ func _ready() -> void:
 	_btn_add_sword.pressed.connect(_on_add_sword_pressed)
 	_btn_add_fireball.pressed.connect(_on_add_fireball_pressed)
 	_btn_add_poleaxe.pressed.connect(_on_add_poleaxe_pressed)
+	_btn_add_spear.pressed.connect(_on_add_spear_pressed)
 	_btn_resume.pressed.connect(close)
 
 func _set_pause_immune_process(n: Node) -> void:
@@ -63,6 +66,8 @@ func _weapon_label(w: Weapon) -> String:
 		return "剑"
 	if w is Poleaxe:
 		return "长柄斧"
+	if w is Spear:
+		return "长矛"
 	if w is FireBall:
 		return "火球"
 	return w.name
@@ -106,5 +111,13 @@ func _on_add_poleaxe_pressed() -> void:
 	if p == null:
 		return
 	var inst: Node = _POLEAXE_SCENE.instantiate()
+	p.add_child(inst)
+	_refresh_weapon_list()
+
+func _on_add_spear_pressed() -> void:
+	var p: Player = _player()
+	if p == null:
+		return
+	var inst: Node = _SPEAR_SCENE.instantiate()
 	p.add_child(inst)
 	_refresh_weapon_list()

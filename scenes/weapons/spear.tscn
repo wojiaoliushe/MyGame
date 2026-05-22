@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://b08dlhpagymfh"]
+
+[ext_resource type="Script" uid="uid://bb230ikcd33b5" path="res://scripts/weapons/spear.gd" id="1_spear_gd"]
+[ext_resource type="Texture2D" uid="uid://mg1tw2g5xneu" path="res://assets/generated/spear_horizontal_strict_frame_0.png" id="2_spear_tex"]
+
+[sub_resource type="RectangleShape2D" id="Spear_blade_shape"]
+size = Vector2(221, 24)
+
+[node name="Spear" type="Node2D" unique_id=522687130]
+script = ExtResource("1_spear_gd")
+
+[node name="Blade" type="Sprite2D" parent="." unique_id=378167092]
+position = Vector2(3.8146973e-06, 0)
+scale = Vector2(1.8515625, 1)
+texture = ExtResource("2_spear_tex")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=1829047489]
+collision_layer = 0
+collision_mask = 2
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1270023059]
+shape = SubResource("Spear_blade_shape")
