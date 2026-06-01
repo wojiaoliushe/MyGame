@@ -10,9 +10,10 @@ size = Vector2(119, 22)
 script = ExtResource("1_sword_gd")
 
 [node name="Blade" type="Sprite2D" parent="." unique_id=1516429518]
-position = Vector2(1.5, 2.0000029)
+position = Vector2(-4.000004, -62)
 scale = Vector2(0.9765625, 0.953125)
 texture = ExtResource("2_sword_tex")
+centered = false
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=815595494]
 collision_layer = 0
@@ -21,7 +22,7 @@ monitoring = false
 monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=953812848]
-position = Vector2(0, 1)
+position = Vector2(59, 0)
 shape = SubResource("Sword_blade_shape")
 
 [connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]

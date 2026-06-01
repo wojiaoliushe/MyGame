@@ -28,9 +28,11 @@ func _get_auto_attack_enabled() -> bool:
 func get_attack_range() -> float:
 	var saved_blade_pos: Vector2 = blade.position
 	var saved_hitbox_pos: Vector2 = hitbox.position
+	if _wielder == null or hitbox_shape == null or hitbox_shape.shape == null:
+		return 0.0
 	blade.position = _get_extended_blade_position()
 	_sync_hitbox_to_blade()
-	var range_val: float = Weapon.compute_attack_range_from_collision_shape(self, hitbox_shape)
+	var range_val: float = Weapon.compute_attack_reach_from_wielder(_wielder, self, hitbox_shape)
 	blade.position = saved_blade_pos
 	hitbox.position = saved_hitbox_pos
 	return range_val
@@ -39,6 +41,7 @@ func get_attack_range() -> float:
 @onready var hitbox: Area2D = $Hitbox
 
 var hitbox_shape: CollisionShape2D
+var _wielder: Node2D
 var _thrust_active: bool = false
 var _hit_instance_ids: Dictionary = {}
 var _attack_range: float = 0.0
@@ -48,6 +51,9 @@ var _scene_retracted_blade_pos: Vector2 = Vector2.ZERO
 var _hitbox_offset_from_blade: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
+	_wielder = get_parent() as Node2D
+	if _wielder == null:
+		push_error("ThrustWeapon: 须作为 Player 等 Node2D 的子节点（%s）" % get_path())
 	hitbox_shape = _find_collision_shape(hitbox)
 	if hitbox_shape == null:
 		push_error("ThrustWeapon: Hitbox 下缺少 CollisionShape2D（%s）" % get_path())
@@ -66,20 +72,17 @@ func _physics_process(delta: float) -> void:
 	if _thrust_active:
 		_sync_hitbox_to_blade()
 		_poll_hitbox_overlaps()
-	if not _get_auto_attack_enabled() or _thrust_active:
-		return
-	var wielder: Node2D = get_parent() as Node2D
-	if wielder == null:
+	if not _get_auto_attack_enabled() or _thrust_active or _wielder == null:
 		return
 	_check_timer += delta
 	if _check_timer < _next_check_wait:
 		return
 	_check_timer = 0.0
 	_next_check_wait = sample_next_attack_interval(_get_check_interval())
-	var target: Node2D = Weapon.find_nearest_enemy_in_range(wielder, _attack_range)
+	var target: Node2D = Weapon.find_nearest_enemy_in_range(_wielder, _attack_range)
 	if target == null:
 		return
-	begin_thrust(wielder, target.global_position)
+	begin_thrust(_wielder, target.global_position)
 
 func begin_thrust(wielder: Node2D, target_global: Vector2) -> void:
 	position = Vector2.ZERO
