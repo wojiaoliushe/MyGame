@@ -7,7 +7,7 @@ const ITEM_SPACING := 2
 @export var player_backpack_path: NodePath = NodePath("../Player/Backpack")
 @export var loadout_sync_path: NodePath = NodePath("../Player/LoadoutWeaponSync")
 
-@onready var _inventory_grid: CtrlInventoryGrid = %InventoryGrid
+@onready var _inventory_grid: MyGameCtrlInventoryGrid = %InventoryGrid
 @onready var _pickable_list: PickableItemList = %PickableItemList
 @onready var _delete_zone: InventoryDeleteDropZone = %DeleteDropZone
 @onready var _btn_resume: Button = %BtnResume
@@ -26,6 +26,7 @@ func _ready() -> void:
 		_inventory_grid.stretch_item_icons = true
 		_pickable_list.field_dimensions = FIELD_DIMENSIONS
 		_pickable_list.item_spacing = ITEM_SPACING
+		_pickable_list.inventory_grid_basic = _inventory_grid.get_inventory_grid_basic()
 		_pickable_list.setup(_backpack)
 		_delete_zone.inventory = _backpack
 		_delete_zone.item_deleted.connect(_on_inventory_item_deleted)
@@ -42,15 +43,19 @@ func _set_pause_immune_process(n: Node) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if not visible:
 		return
-	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
-		close()
-		get_viewport().set_input_as_handled()
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_ESCAPE:
+			close()
+			get_viewport().set_input_as_handled()
+		elif event.keycode == KEY_R and InventoryDragSession.try_rotate_clockwise():
+			get_viewport().set_input_as_handled()
 
 func open() -> void:
 	if _backpack == null:
 		_backpack = get_node_or_null(player_backpack_path) as Inventory
 		if _backpack != null:
 			_inventory_grid.inventory = _backpack
+			_pickable_list.inventory_grid_basic = _inventory_grid.get_inventory_grid_basic()
 			_pickable_list.setup(_backpack)
 			_delete_zone.inventory = _backpack
 	visible = true

@@ -23,6 +23,7 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 		return
 	var item: InventoryItem = data as InventoryItem
 	if inventory.remove_item(item):
+		InventoryDragSession.mark_delete_drop_handled()
 		item_deleted.emit(item)
 
 func _notification(what: int) -> void:

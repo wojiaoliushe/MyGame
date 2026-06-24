@@ -49,3 +49,6 @@ func _ready() -> void:
 
 	_update_size()
 	_queue_refresh()
+
+func get_inventory_grid_basic() -> Control:
+	return _ctrl_inventory_grid_basic

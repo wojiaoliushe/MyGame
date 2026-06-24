@@ -12,6 +12,7 @@ const PICKABLE_ITEMS: Array[Dictionary] = [
 @export var item_spacing: int = 2
 
 var backpack: Inventory
+var inventory_grid_basic: Control
 
 @onready var _list: VBoxContainer = %ItemVBox
 
@@ -22,7 +23,9 @@ func setup(source_backpack: Inventory) -> void:
 	backpack = source_backpack
 	for row: Node in _list.get_children():
 		if row is PickableItemRow:
-			(row as PickableItemRow).backpack = backpack
+			var pickable_row: PickableItemRow = row as PickableItemRow
+			pickable_row.backpack = backpack
+			pickable_row.inventory_grid_basic = inventory_grid_basic
 	_rebuild_rows()
 
 func _rebuild_rows() -> void:
@@ -36,6 +39,7 @@ func _rebuild_rows() -> void:
 		row.field_dimensions = field_dimensions
 		row.item_spacing = item_spacing
 		row.backpack = backpack
+		row.inventory_grid_basic = inventory_grid_basic
 		row.custom_minimum_size = Vector2(0, 40)
 		row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		var panel := PanelContainer.new()
