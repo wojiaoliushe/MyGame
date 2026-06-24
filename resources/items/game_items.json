@@ -1,0 +1,37 @@
+{
+  "weapon_base": {
+	"name": "武器",
+	"weight": 2,
+	"stack_size": 1,
+	"max_stack_size": 1,
+	"tags": ["weapon"]
+  },
+  "weapons/sword": {
+	"inherits": "weapon_base",
+	"name": "剑",
+	"image": "res://assets/generated/pixel_sword_frame_0.png",
+	"size": "Vector2i(1, 2)",
+	"weapon_scene": "res://scenes/weapons/sword.tscn"
+  },
+  "weapons/poleaxe": {
+	"inherits": "weapon_base",
+	"name": "长柄斧",
+	"image": "res://assets/generated/poleaxe_horizontal_strict_frame_0.png",
+	"size": "Vector2i(1, 3)",
+	"weapon_scene": "res://scenes/weapons/poleaxe.tscn"
+  },
+  "weapons/spear": {
+	"inherits": "weapon_base",
+	"name": "长矛",
+	"image": "res://assets/generated/spear_horizontal_strict_frame_0.png",
+	"size": "Vector2i(1, 4)",
+	"weapon_scene": "res://scenes/weapons/spear.tscn"
+  },
+  "weapons/fire_ball": {
+	"inherits": "weapon_base",
+	"name": "火球",
+	"image": "res://assets/generated/fireball_horizontal_right_frame_0.png",
+	"size": "Vector2i(1, 1)",
+	"weapon_scene": "res://scenes/weapons/fire_ball.tscn"
+  }
+}

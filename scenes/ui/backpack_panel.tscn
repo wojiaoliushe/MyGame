@@ -1,0 +1,114 @@
+[gd_scene format=3 uid="uid://bxf62msgv4mt1"]
+
+[ext_resource type="Script" path="res://scripts/ui/backpack_panel.gd" id="1_bp"]
+[ext_resource type="Script" path="res://scripts/ui/pickable_item_list.gd" id="2_pil"]
+[ext_resource type="Script" path="res://scripts/ui/ctrl_inventory_grid_mygame.gd" id="3_grid"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.12, 0.12, 0.14, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.35, 0.35, 0.4, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="BackpackPanel" type="CanvasLayer"]
+layer = 100
+script = ExtResource("1_bp")
+player_backpack_path = NodePath("../Player/Backpack")
+loadout_sync_path = NodePath("../Player/LoadoutWeaponSync")
+
+[node name="Overlay" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="Overlay"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.7)
+
+[node name="Center" type="CenterContainer" parent="Overlay"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Overlay/Center"]
+custom_minimum_size = Vector2(720, 0)
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Margin" type="MarginContainer" parent="Overlay/Center/Panel"]
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBox" type="VBoxContainer" parent="Overlay/Center/Panel/Margin"]
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="Overlay/Center/Panel/Margin/VBox"]
+text = "背包管理"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 28
+
+[node name="ContentHBox" type="HBoxContainer" parent="Overlay/Center/Panel/Margin/VBox"]
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="BackpackColumn" type="VBoxContainer" parent="Overlay/Center/Panel/Margin/VBox/ContentHBox"]
+theme_override_constants/separation = 8
+
+[node name="BackpackTitle" type="Label" parent="Overlay/Center/Panel/Margin/VBox/ContentHBox/BackpackColumn"]
+text = "背包（4×4）"
+theme_override_font_sizes/font_size = 20
+
+[node name="InventoryGrid" type="Control" parent="Overlay/Center/Panel/Margin/VBox/ContentHBox/BackpackColumn"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(210, 210)
+layout_mode = 2
+script = ExtResource("3_grid")
+field_dimensions = Vector2(48, 48)
+item_spacing = 2
+stretch_item_icons = true
+
+[node name="PickableColumn" type="VBoxContainer" parent="Overlay/Center/Panel/Margin/VBox/ContentHBox"]
+custom_minimum_size = Vector2(220, 0)
+size_flags_vertical = 0
+theme_override_constants/separation = 8
+
+[node name="PickableTitle" type="Label" parent="Overlay/Center/Panel/Margin/VBox/ContentHBox/PickableColumn"]
+text = "可拾取物品"
+theme_override_font_sizes/font_size = 20
+
+[node name="PickableHint" type="Label" parent="Overlay/Center/Panel/Margin/VBox/ContentHBox/PickableColumn"]
+text = "长按名称拖动到背包"
+theme_override_colors/font_color = Color(0.7, 0.7, 0.75, 1)
+theme_override_font_sizes/font_size = 14
+
+[node name="PickableItemList" type="ScrollContainer" parent="Overlay/Center/Panel/Margin/VBox/ContentHBox/PickableColumn"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 210)
+size_flags_vertical = 3
+script = ExtResource("2_pil")
+
+[node name="ItemVBox" type="VBoxContainer" parent="Overlay/Center/Panel/Margin/VBox/ContentHBox/PickableColumn/PickableItemList"]
+unique_name_in_owner = true
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="BtnResume" type="Button" parent="Overlay/Center/Panel/Margin/VBox"]
+unique_name_in_owner = true
+text = "继续游戏"

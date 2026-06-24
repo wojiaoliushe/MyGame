@@ -17,7 +17,7 @@ config/icon="res://icon.svg"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/ZzSprite/plugin.cfg")
+enabled=PackedStringArray("res://addons/ZzSprite/plugin.cfg", "res://addons/gloot/plugin.cfg")
 
 [physics]
 

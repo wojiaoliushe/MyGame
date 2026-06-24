@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dx5wi8lh2rel" path="res://assets/generated/grass_tile_frame_0.png" id="2_h2yge"]
 [ext_resource type="PackedScene" uid="uid://dga2xs23iwq6l" path="res://scenes/player/player.tscn" id="2_player_scene"]
 [ext_resource type="Texture2D" uid="uid://cvp6a5g2qobv3" path="res://assets/generated/wall_tile_frame_0.png" id="3_1bvp3"]
-[ext_resource type="PackedScene" uid="uid://6ro1qgef1erx" path="res://scenes/ui/weapon_pause_menu.tscn" id="5_weapon_pause_menu"]
+[ext_resource type="PackedScene" uid="uid://cbackpackpanel01" path="res://scenes/ui/backpack_panel.tscn" id="5_backpack_panel"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1bvp3"]
 texture = ExtResource("2_h2yge")
@@ -58,7 +58,7 @@ theme_override_font_sizes/font_size = 36
 text = "3"
 vertical_alignment = 1
 
-[node name="WeaponPauseMenu" parent="." instance=ExtResource("5_weapon_pause_menu")]
+[node name="BackpackPanel" parent="." instance=ExtResource("5_backpack_panel")]
 
 [node name="GameOverLabel" type="Label" parent="CanvasLayer" unique_id=730466300]
 visible = false

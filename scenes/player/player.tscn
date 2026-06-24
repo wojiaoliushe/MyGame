@@ -1,7 +1,11 @@
-[gd_scene format=3 uid="uid://dga2xs23iwq6l"]
+[gd_scene load_steps=7 format=3 uid="uid://dga2xs23iwq6l"]
 
 [ext_resource type="Script" uid="uid://denk657eli4g8" path="res://scripts/player.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://uo55uv4g10ia" path="res://assets/generated/pixel_knight_frame_0.png" id="2_texture"]
+[ext_resource type="JSON" path="res://resources/items/game_items.json" id="3_items"]
+[ext_resource type="Script" path="res://addons/gloot/core/inventory.gd" id="4_inventory"]
+[ext_resource type="Script" path="res://addons/gloot/core/constraints/grid_constraint.gd" id="5_grid"]
+[ext_resource type="Script" path="res://scripts/inventory/loadout_weapon_sync.gd" id="6_sync"]
 
 [sub_resource type="RectangleShape2D" id="1_shape"]
 size = Vector2(64, 64)
@@ -17,3 +21,16 @@ shape = SubResource("1_shape")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1169998653]
 position_smoothing_enabled = true
+
+[node name="Backpack" type="Node" parent="."]
+script = ExtResource("4_inventory")
+protoset = ExtResource("3_items")
+
+[node name="GridConstraint" type="Node" parent="Backpack"]
+script = ExtResource("5_grid")
+size = Vector2i(4, 4)
+
+[node name="LoadoutWeaponSync" type="Node" parent="."]
+script = ExtResource("6_sync")
+player_path = NodePath("..")
+backpack_path = NodePath("../Backpack")

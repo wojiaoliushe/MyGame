@@ -12,13 +12,15 @@
 
 ### 1.1 目标
 
-| 优先级 | 目标 |
-|--------|------|
-| P0 | 玩家拥有可交互的**网格背包**（暂停时打开），支持拖拽、矩形占格、旋转（Gloot `GridConstraint`） |
-| P0 | 背包内武器类物品与运行时 **`Weapon` 场景**同步（战斗逻辑沿用现有 `SlashWeapon` / `ThrustWeapon` / `RangeWeapon`） |
-| P1 | 背包状态可 **序列化/读档**（Gloot `serialize` / `deserialize`） |
-| P2 | **异形占格**（L/T 等 pattern），替换矩形占位逻辑 |
-| P3 | **邻接加成**（Backpack Hero 式，按 `tags` 相邻触发） |
+
+| 优先级 | 目标                                                                                      |
+| --- | --------------------------------------------------------------------------------------- |
+| P0  | 玩家拥有可交互的**网格背包**（暂停时打开），支持拖拽、矩形占格、旋转（Gloot `GridConstraint`）                            |
+| P0  | 背包内武器类物品与运行时 `**Weapon` 场景**同步（战斗逻辑沿用现有 `SlashWeapon` / `ThrustWeapon` / `RangeWeapon`） |
+| P1  | 背包状态可 **序列化/读档**（Gloot `serialize` / `deserialize`）                                     |
+| P2  | **异形占格**（L/T 等 pattern），替换矩形占位逻辑                                                        |
+| P3  | **邻接加成**（Backpack Hero 式，按 `tags` 相邻触发）                                                 |
+
 
 ### 1.2 非目标（本期不做）
 
@@ -31,13 +33,15 @@
 
 ## 2. 技术决策摘要
 
-| 决策 | 选择 | 理由 |
-|------|------|------|
-| 背包底座 | **GLoot 3.x** | 物品原型、转移、堆叠、网格 UI、存档成熟；避免自研整套框架 |
-| 一期占格 | **矩形** `GridConstraint` | 官方支持，先打通战斗同步与暂停 UI |
-| 二期占格 | 自研 **`PatternGridConstraint`** + fork **`CtrlPatternInventoryGrid`** | Gloot 矩形 + 四叉树无法表达 L 形空角；独立 addon 便于合并上游 |
-| 战斗 | **不改** `Weapon` 继承体系 | 仅改「谁被 `instantiate`」 |
-| 旧 UI | **废弃** `WeaponPauseMenu` 的 add_child 武器按钮 | 由背包 UI + `LoadoutWeaponSync` 替代 |
+
+| 决策   | 选择                                                                   | 理由                                       |
+| ---- | -------------------------------------------------------------------- | ---------------------------------------- |
+| 背包底座 | **GLoot 3.x**                                                        | 物品原型、转移、堆叠、网格 UI、存档成熟；避免自研整套框架           |
+| 一期占格 | **矩形** `GridConstraint`                                              | 官方支持，先打通战斗同步与暂停 UI                       |
+| 二期占格 | 自研 `**PatternGridConstraint`** + fork `**CtrlPatternInventoryGrid**` | Gloot 矩形 + 四叉树无法表达 L 形空角；独立 addon 便于合并上游 |
+| 战斗   | **不改** `Weapon` 继承体系                                                 | 仅改「谁被 `instantiate`」                     |
+| 旧 UI | **废弃** `WeaponPauseMenu` 的 add_child 武器按钮                            | 由背包 UI + `LoadoutWeaponSync` 替代          |
+
 
 ---
 
@@ -93,12 +97,14 @@ scripts/ui/
 
 ### 4.2 修改/废弃
 
-| 文件 | 操作 |
-|------|------|
-| `scripts/ui/weapon_pause_menu.gd` | 一期末废弃或改为仅调用 `BackpackPanel.open()` |
-| `scenes/ui/weapon_pause_menu.tscn` | 由 `backpack_panel.tscn` 替代 |
-| `scenes/player/player.tscn` | 移除默认子节点 `Sword`/`FireBall`（改由同步器生成）；添加 `Backpack`、`LoadoutWeaponSync` |
-| `scenes/main.tscn` | **前置条件**：若仓库缺失须先恢复；挂载 `BackpackPanel`、绑定 Player 背包 |
+
+| 文件                                 | 操作                                                                    |
+| ---------------------------------- | --------------------------------------------------------------------- |
+| `scripts/ui/weapon_pause_menu.gd`  | 一期末废弃或改为仅调用 `BackpackPanel.open()`                                    |
+| `scenes/ui/weapon_pause_menu.tscn` | 由 `backpack_panel.tscn` 替代                                            |
+| `scenes/player/player.tscn`        | 移除默认子节点 `Sword`/`FireBall`（改由同步器生成）；添加 `Backpack`、`LoadoutWeaponSync` |
+| `scenes/main.tscn`                 | **前置条件**：若仓库缺失须先恢复；挂载 `BackpackPanel`、绑定 Player 背包                    |
+
 
 ### 4.3 遵守仓库约定
 
@@ -119,17 +125,19 @@ scripts/ui/
 
 ### 5.3 一期字段规范（矩形 GridConstraint）
 
-| 字段 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `inherits` | string | 否 | 继承原型 ID |
-| `name` | string | 是 | 显示名 |
-| `image` | string | 是 | `res://` 纹理路径，供 `get_texture()` |
-| `size` | string | 武器建议 | `"Vector2i(w, h)"`，默认 1×1 |
-| `rotated` | bool | 否 | 90° 旋转 |
-| `weight` | number | 否 | 配合 `WeightConstraint` |
-| `stack_size` / `max_stack_size` | number | 否 | 武器固定为 1 |
-| `weapon_scene` | string | 武器必填 | 对应 `res://scenes/weapons/*.tscn` |
-| `tags` | 见 5.5 | 否 | 邻接用，一期可只定义不计算 |
+
+| 字段                              | 类型     | 必填   | 说明                               |
+| ------------------------------- | ------ | ---- | -------------------------------- |
+| `inherits`                      | string | 否    | 继承原型 ID                          |
+| `name`                          | string | 是    | 显示名                              |
+| `image`                         | string | 是    | `res://` 纹理路径，供 `get_texture()`  |
+| `size`                          | string | 武器建议 | `"Vector2i(w, h)"`，默认 1×1        |
+| `rotated`                       | bool   | 否    | 90° 旋转                           |
+| `weight`                        | number | 否    | 配合 `WeightConstraint`            |
+| `stack_size` / `max_stack_size` | number | 否    | 武器固定为 1                          |
+| `weapon_scene`                  | string | 武器必填 | 对应 `res://scenes/weapons/*.tscn` |
+| `tags`                          | 见 5.5  | 否    | 邻接用，一期可只定义不计算                    |
+
 
 ### 5.4 一期示例内容
 
@@ -357,9 +365,9 @@ if other.can_add_item(item):
 
 ### 阶段 0：前置
 
-- [ ] 恢复或创建 `scenes/main.tscn` 并配置 `project.godot` 的 `run/main_scene`
-- [ ] 安装并启用 GLoot 插件
-- [ ] 创建 `resources/items/game_items.json`
+- 恢复或创建 `scenes/main.tscn` 并配置 `project.godot` 的 `run/main_scene`
+- 安装并启用 GLoot 插件
+- 创建 `resources/items/game_items.json`
 
 **验收**：编辑器可运行主场景，无脚本错误。
 
@@ -367,12 +375,14 @@ if other.can_add_item(item):
 
 ### 阶段 1：矩形背包 + UI（P0）
 
-| 步骤 | 内容 |
-|------|------|
-| 1.1 | Player 下添加 `Inventory` + `GridConstraint(5,4)`，设置 protoset |
+
+| 步骤  | 内容                                                                     |
+| --- | ---------------------------------------------------------------------- |
+| 1.1 | Player 下添加 `Inventory` + `GridConstraint(5,4)`，设置 protoset             |
 | 1.2 | 实现 `backpack_panel.tscn` + `backpack_panel.gd`，`CtrlInventoryGrid` 可拖拽 |
-| 1.3 | `main.gd` Esc 打开/关闭背包；暂停生效 |
-| 1.4 | 编辑器或 `_ready` 中放入 1–2 个测试物品 |
+| 1.3 | `main.gd` Esc 打开/关闭背包；暂停生效                                             |
+| 1.4 | 编辑器或 `_ready` 中放入 1–2 个测试物品                                            |
+
 
 **验收**：
 
@@ -384,12 +394,14 @@ if other.can_add_item(item):
 
 ### 阶段 2：战斗同步（P0）
 
-| 步骤 | 内容 |
-|------|------|
-| 2.1 | 实现 `LoadoutWeaponSync`，接信号 |
-| 2.2 | 从 `player.tscn` 移除默认武器子节点 |
+
+| 步骤  | 内容                               |
+| --- | -------------------------------- |
+| 2.1 | 实现 `LoadoutWeaponSync`，接信号       |
+| 2.2 | 从 `player.tscn` 移除默认武器子节点        |
 | 2.3 | 背包放入 `weapons/sword` 后，玩家可自动攻击怪物 |
-| 2.4 | 移除背包内武器后，对应攻击消失 |
+| 2.4 | 移除背包内武器后，对应攻击消失                  |
+
 
 **验收**：
 
@@ -400,11 +412,13 @@ if other.can_add_item(item):
 
 ### 阶段 3：替换旧暂停菜单 + 存档（P1）
 
-| 步骤 | 内容 |
-|------|------|
-| 3.1 | 删除或停用 `WeaponPauseMenu` 的加剑按钮逻辑 |
+
+| 步骤  | 内容                                          |
+| --- | ------------------------------------------- |
+| 3.1 | 删除或停用 `WeaponPauseMenu` 的加剑按钮逻辑             |
 | 3.2 | 实现 `BackpackSave` 并在合适时机 save/load（如局外/检查点） |
-| 3.3 | Game Over 时背包关闭 |
+| 3.3 | Game Over 时背包关闭                             |
+
 
 **验收**：
 
@@ -415,14 +429,16 @@ if other.can_add_item(item):
 
 ### 阶段 4：异形占格（P2）
 
-| 步骤 | 内容 |
-|------|------|
+
+| 步骤  | 内容                                                                                      |
+| --- | --------------------------------------------------------------------------------------- |
 | 4.1 | 新建 `addons/mygame_inventory/pattern_grid_constraint.gd`（**复制** `grid_constraint.gd` 改造） |
-| 4.2 | 用 **逐格占用表** `_cells: Dictionary` 替代四叉树矩形占位 |
-| 4.3 | 实现 `get_footprint(item) -> Array[Vector2i]`，读 `pattern` + `rotation_steps` |
-| 4.4 | fork `CtrlInventoryGrid` → `CtrlPatternInventoryGrid`，合法位置逐格高亮 |
-| 4.5 | Player `Backpack`：**移除** `GridConstraint`，**仅保留** `PatternGridConstraint` |
-| 4.6 | 更新 `game_items.json` 中至少一件 L 形测试武器 |
+| 4.2 | 用 **逐格占用表** `_cells: Dictionary` 替代四叉树矩形占位                                              |
+| 4.3 | 实现 `get_footprint(item) -> Array[Vector2i]`，读 `pattern` + `rotation_steps`              |
+| 4.4 | fork `CtrlInventoryGrid` → `CtrlPatternInventoryGrid`，合法位置逐格高亮                          |
+| 4.5 | Player `Backpack`：**移除** `GridConstraint`，**仅保留** `PatternGridConstraint`               |
+| 4.6 | 更新 `game_items.json` 中至少一件 L 形测试武器                                                      |
+
 
 **验收**：
 
@@ -436,11 +452,13 @@ if other.can_add_item(item):
 
 ### 阶段 5：邻接加成（P3）
 
-| 步骤 | 内容 |
-|------|------|
-| 5.1 | Protoset 增加 `tags: ["melee", "fire"]` 等 |
+
+| 步骤  | 内容                                                      |
+| --- | ------------------------------------------------------- |
+| 5.1 | Protoset 增加 `tags: ["melee", "fire"]` 等                 |
 | 5.2 | `AdjacencyBonusCalculator`：在 `constraint_changed` 时扫描四邻 |
-| 5.3 | 结果写入 `Player` 或全局 `CombatModifiers`，`Weapon` 读倍率 |
+| 5.3 | 结果写入 `Player` 或全局 `CombatModifiers`，`Weapon` 读倍率        |
+
 
 **验收**：相邻「火 + 剑」时伤害或攻速按设计变化（数值可配置）。
 
@@ -452,12 +470,14 @@ if other.can_add_item(item):
 
 ### 10.1 与 `GridConstraint` 的差异
 
-| 项目 | GridConstraint | PatternGridConstraint |
-|------|----------------|------------------------|
-| 占位模型 | 外接矩形 + QuadTree | `Vector2i → InventoryItem` 字典 |
-| `rect_free` | 矩形 | 遍历 footprint 每格 |
-| `get_item_at(pos)` | 矩形查询 | 单格查询 |
-| `get_item_size` | 真实占格 | **仅 UI 外接框**，不参与占位 |
+
+| 项目                 | GridConstraint  | PatternGridConstraint         |
+| ------------------ | --------------- | ----------------------------- |
+| 占位模型               | 外接矩形 + QuadTree | `Vector2i → InventoryItem` 字典 |
+| `rect_free`        | 矩形              | 遍历 footprint 每格               |
+| `get_item_at(pos)` | 矩形查询            | 单格查询                          |
+| `get_item_size`    | 真实占格            | **仅 UI 外接框**，不参与占位            |
+
 
 ### 10.2 最小 API（与 Grid 对齐，便于 fork UI）
 
@@ -477,10 +497,12 @@ func get_rotated_footprint(item: InventoryItem) -> Array[Vector2i]
 
 ### 10.3 物品实例属性
 
-| 属性 | 说明 |
-|------|------|
-| `rotation_steps` | 0–3，实例级，可 `set_property` |
-| `pattern` | 也可只存在 protoset，用 `get_property` 读取 |
+
+| 属性               | 说明                                 |
+| ---------------- | ---------------------------------- |
+| `rotation_steps` | 0–3，实例级，可 `set_property`           |
+| `pattern`        | 也可只存在 protoset，用 `get_property` 读取 |
+
 
 ---
 
@@ -488,39 +510,41 @@ func get_rotated_footprint(item: InventoryItem) -> Array[Vector2i]
 
 ### 11.1 背包 UI
 
-1. 空背包 → 放入 2×2 斧 → 剩余格正确减少  
-2. 放不下时 `create_and_add_item` 返回 `null`  
-3. 拖出边界 → 回弹或取消  
-4. Esc 切换暂停/恢复  
+1. 空背包 → 放入 2×2 斧 → 剩余格正确减少
+2. 放不下时 `create_and_add_item` 返回 `null`
+3. 拖出边界 → 回弹或取消
+4. Esc 切换暂停/恢复
 
 ### 11.2 战斗同步
 
-1. 仅火球 → 仅远程攻击  
-2. 剑 + 矛 → 两种攻击并存  
-3. 移出剑 → 挥砍停止  
+1. 仅火球 → 仅远程攻击
+2. 剑 + 矛 → 两种攻击并存
+3. 移出剑 → 挥砍停止
 
 ### 11.3 存档
 
-1. 物品在 (2,1) → 存档 → 读档 → 位置不变  
+1. 物品在 (2,1) → 存档 → 读档 → 位置不变
 
 ### 11.4 异形（阶段 4）
 
-1. L 形占 (0,0)(1,0)(0,1)，(1,1) 可放 1×1  
-2. 旋转后仍不穿透占格  
+1. L 形占 (0,0)(1,0)(0,1)，(1,1) 可放 1×1
+2. 旋转后仍不穿透占格
 
 ---
 
 ## 12. 风险与约束
 
-| 风险 | 影响 | 缓解 |
-|------|------|------|
-| `main.tscn` 缺失 | 无法联调 | 阶段 0 必须完成 |
-| `CanvasLayer` 拖拽偏移 | 图标与鼠标错位 | 背包 UI 放独立 `CanvasLayer`；参考 Gloot #251 |
-| 升级 Gloot 冲突 | fork 文件合并失败 | 扩展仅在 `addons/mygame_inventory/` |
-| 双约束并存 | 占位混乱 | 文档约定仅一种网格约束 |
-| 多件同武器原型 | 平衡性 | 设计层允许；后续可加「同类唯一」规则 |
-| `weapon_scene` 为空 | 静默无武器 | `sync` 时 `push_warning` |
-| 暂停与怪物生成 | 刷怪 Timer 行为 | 确认 `Timer` 在暂停下是否停止；必要时 `process_mode` 与 main 一致 |
+
+| 风险                 | 影响          | 缓解                                               |
+| ------------------ | ----------- | ------------------------------------------------ |
+| `main.tscn` 缺失     | 无法联调        | 阶段 0 必须完成                                        |
+| `CanvasLayer` 拖拽偏移 | 图标与鼠标错位     | 背包 UI 放独立 `CanvasLayer`；参考 Gloot #251            |
+| 升级 Gloot 冲突        | fork 文件合并失败 | 扩展仅在 `addons/mygame_inventory/`                  |
+| 双约束并存              | 占位混乱        | 文档约定仅一种网格约束                                      |
+| 多件同武器原型            | 平衡性         | 设计层允许；后续可加「同类唯一」规则                               |
+| `weapon_scene` 为空  | 静默无武器       | `sync` 时 `push_warning`                          |
+| 暂停与怪物生成            | 刷怪 Timer 行为 | 确认 `Timer` 在暂停下是否停止；必要时 `process_mode` 与 main 一致 |
+
 
 ---
 
@@ -539,7 +563,7 @@ func get_rotated_footprint(item: InventoryItem) -> Array[Vector2i]
 
 ## 14. 参考链接
 
-- GLoot 仓库：https://github.com/peter-kish/gloot  
+- GLoot 仓库：[https://github.com/peter-kish/gloot](https://github.com/peter-kish/gloot)  
 - GLoot 文档：`addons/gloot` 安装后见官方 `docs/`  
 - 示例场景：`addons/gloot/examples/inventory_grid_transfer.tscn`  
 - 现有武器基类：`scripts/weapons/weapon.gd`  
@@ -549,6 +573,7 @@ func get_rotated_footprint(item: InventoryItem) -> Array[Vector2i]
 
 ## 15. 修订记录
 
-| 版本 | 日期 | 说明 |
-|------|------|------|
+
+| 版本  | 日期         | 说明                                 |
+| --- | ---------- | ---------------------------------- |
 | 1.0 | 2026-06-01 | 初版：Gloot 矩形一期 + Pattern 二期 + 分阶段验收 |

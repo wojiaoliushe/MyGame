@@ -18,7 +18,7 @@ var _spawn_ramp_timer: Timer
 
 @onready var _player: Player = $Player
 @onready var _health_label: Label = $CanvasLayer/HealthLabel
-@onready var _weapon_pause_menu: WeaponPauseMenu = $WeaponPauseMenu
+@onready var _backpack_panel: BackpackPanel = $BackpackPanel
 
 func _ready() -> void:
 	_player.health_changed.connect(_on_player_health_changed)
@@ -41,7 +41,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if get_tree().paused:
 		return
-	_weapon_pause_menu.open()
+	_backpack_panel.open()
 	get_viewport().set_input_as_handled()
 
 func _is_game_over_ui_visible() -> bool:
@@ -83,7 +83,7 @@ func spawn_monster() -> void:
 	add_child(monster)
 
 func trigger_game_over() -> void:
-	_weapon_pause_menu.visible = false
+	_backpack_panel.visible = false
 	var label: Label = $CanvasLayer/GameOverLabel
 	label.text = "GAME OVER"
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
