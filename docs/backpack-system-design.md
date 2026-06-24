@@ -50,19 +50,19 @@
 │    └── CtrlInventoryGrid  →  Inventory (player_backpack)    │
 │         （二期：CtrlPatternInventoryGrid）                    │
 └───────────────────────────┬─────────────────────────────────┘
-                            │ constraint_changed / item_*
+							│ constraint_changed / item_*
 ┌───────────────────────────▼─────────────────────────────────┐
 │  桥接层                                                      │
 │  LoadoutWeaponSync (Node on Player)                         │
 │    读取 InventoryItem.weapon_scene → 重建 Player 下 Weapon   │
 └───────────────────────────┬─────────────────────────────────┘
-                            │
+							│
 ┌───────────────────────────▼─────────────────────────────────┐
 │  数据层 (GLoot)                                              │
 │  ItemProtoset (JSON) → Inventory + GridConstraint           │
 │  （可选 WeightConstraint / ItemSlot）                        │
 └───────────────────────────┬─────────────────────────────────┘
-                            │
+							│
 ┌───────────────────────────▼─────────────────────────────────┐
 │  战斗层（现有）                                               │
 │  Sword / Spear / Poleaxe / FireBall …                       │
@@ -136,40 +136,40 @@ scripts/ui/
 ```json
 {
   "weapon_base": {
-    "name": "武器",
-    "weight": 2,
-    "stack_size": 1,
-    "max_stack_size": 1,
-    "tags": ["weapon"]
+	"name": "武器",
+	"weight": 2,
+	"stack_size": 1,
+	"max_stack_size": 1,
+	"tags": ["weapon"]
   },
   "weapons/sword": {
-    "inherits": "weapon_base",
-    "name": "剑",
-    "image": "res://assets/generated/pixel_sword_frame_0.png",
-    "size": "Vector2i(1, 2)",
-    "weapon_scene": "res://scenes/weapons/sword.tscn"
+	"inherits": "weapon_base",
+	"name": "剑",
+	"image": "res://assets/generated/pixel_sword_frame_0.png",
+	"size": "Vector2i(1, 2)",
+	"weapon_scene": "res://scenes/weapons/sword.tscn"
   },
   "weapons/poleaxe": {
-    "inherits": "weapon_base",
-    "name": "长柄斧",
-    "image": "res://assets/generated/poleaxe_horizontal_strict_frame_0.png",
-    "size": "Vector2i(2, 2)",
-    "weapon_scene": "res://scenes/weapons/poleaxe.tscn"
+	"inherits": "weapon_base",
+	"name": "长柄斧",
+	"image": "res://assets/generated/poleaxe_horizontal_strict_frame_0.png",
+	"size": "Vector2i(2, 2)",
+	"weapon_scene": "res://scenes/weapons/poleaxe.tscn"
   },
   "weapons/spear": {
-    "inherits": "weapon_base",
-    "name": "长矛",
-    "image": "res://assets/generated/spear_horizontal_strict_frame_0.png",
-    "size": "Vector2i(1, 3)",
-    "rotated": "true",
-    "weapon_scene": "res://scenes/weapons/spear.tscn"
+	"inherits": "weapon_base",
+	"name": "长矛",
+	"image": "res://assets/generated/spear_horizontal_strict_frame_0.png",
+	"size": "Vector2i(1, 3)",
+	"rotated": "true",
+	"weapon_scene": "res://scenes/weapons/spear.tscn"
   },
   "weapons/fire_ball": {
-    "inherits": "weapon_base",
-    "name": "火球",
-    "image": "res://assets/generated/fireball_horizontal_right_frame_0.png",
-    "size": "Vector2i(1, 1)",
-    "weapon_scene": "res://scenes/weapons/fire_ball.tscn"
+	"inherits": "weapon_base",
+	"name": "火球",
+	"image": "res://assets/generated/fireball_horizontal_right_frame_0.png",
+	"size": "Vector2i(1, 1)",
+	"weapon_scene": "res://scenes/weapons/fire_ball.tscn"
   }
 }
 ```
@@ -218,8 +218,8 @@ Main (Node2D) ← scripts/main.gd
 ├── Player (实例)
 ├── … 怪物/UI …
 └── BackpackPanel (CanvasLayer)             # scenes/ui/backpack_panel.tscn
-      layer 高优先级
-      process_mode = ALWAYS（子树继承设置）
+	  layer 高优先级
+	  process_mode = ALWAYS（子树继承设置）
 ```
 
 ### 6.3 背包 UI（`scenes/ui/backpack_panel.tscn`）
@@ -228,10 +228,10 @@ Main (Node2D) ← scripts/main.gd
 BackpackPanel (CanvasLayer) ← scripts/ui/backpack_panel.gd
 ├── ColorRect / Panel（半透明遮罩，可选）
 └── MarginContainer
-      └── CtrlInventoryGrid                 # GLoot 控件
-            inventory → Player/Backpack
-            field_dimensions ≈ (48, 48)
-            item_spacing = 2
+	  └── CtrlInventoryGrid                 # GLoot 控件
+			inventory → Player/Backpack
+			field_dimensions ≈ (48, 48)
+			item_spacing = 2
 ```
 
 ### 6.4 暂停与输入（与现 `main.gd` 一致）
@@ -267,10 +267,10 @@ BackpackPanel (CanvasLayer) ← scripts/ui/backpack_panel.gd
 
 ```gdscript
 func sync_from_backpack() -> void:
-    # 1. 删除 Player 下所有 Weapon 类型子节点（is Weapon）
-    # 2. 遍历 backpack.get_items()
-    # 3. path = item.get_property("weapon_scene", "")
-    # 4. 若 path 非空且有效：player.add_child(load(path).instantiate())
+	# 1. 删除 Player 下所有 Weapon 类型子节点（is Weapon）
+	# 2. 遍历 backpack.get_items()
+	# 3. path = item.get_property("weapon_scene", "")
+	# 4. 若 path 非空且有效：player.add_child(load(path).instantiate())
 ```
 
 **规则**：
@@ -297,13 +297,13 @@ func toggle() -> void
 
 ```gdscript
 static func serialize_inventory(inv: Inventory) -> String:
-    return JSON.stringify(inv.serialize())
+	return JSON.stringify(inv.serialize())
 
 static func deserialize_inventory(inv: Inventory, json_str: String) -> bool:
-    var data = JSON.parse_string(json_str)
-    if data is Dictionary:
-        return inv.deserialize(data)
-    return false
+	var data = JSON.parse_string(json_str)
+	if data is Dictionary:
+		return inv.deserialize(data)
+	return false
 ```
 
 存档键名建议：`player_backpack`（与全局存档系统对接时由主存档模块调用）。
@@ -342,7 +342,7 @@ grid.add_item_at(item2, Vector2i(0, 0))
 
 # 转移到另一 Inventory（同 protoset）
 if other.can_add_item(item):
-    other.add_item(item)
+	other.add_item(item)
 ```
 
 ### 8.4 双背包拖拽
