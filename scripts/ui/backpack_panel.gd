@@ -9,6 +9,7 @@ const ITEM_SPACING := 2
 
 @onready var _inventory_grid: CtrlInventoryGrid = %InventoryGrid
 @onready var _pickable_list: PickableItemList = %PickableItemList
+@onready var _delete_zone: InventoryDeleteDropZone = %DeleteDropZone
 @onready var _btn_resume: Button = %BtnResume
 
 var _backpack: Inventory
@@ -26,6 +27,8 @@ func _ready() -> void:
 		_pickable_list.field_dimensions = FIELD_DIMENSIONS
 		_pickable_list.item_spacing = ITEM_SPACING
 		_pickable_list.setup(_backpack)
+		_delete_zone.inventory = _backpack
+		_delete_zone.item_deleted.connect(_on_inventory_item_deleted)
 		_inventory_grid.item_dropped.connect(_on_inventory_item_dropped)
 	else:
 		push_warning("BackpackPanel: 未绑定玩家背包")
@@ -49,6 +52,7 @@ func open() -> void:
 		if _backpack != null:
 			_inventory_grid.inventory = _backpack
 			_pickable_list.setup(_backpack)
+			_delete_zone.inventory = _backpack
 	visible = true
 	get_tree().paused = true
 
@@ -58,6 +62,9 @@ func close() -> void:
 	get_tree().paused = false
 
 func _on_inventory_item_dropped(_item: InventoryItem, _offset: Vector2) -> void:
+	_request_loadout_sync()
+
+func _on_inventory_item_deleted(_item: InventoryItem) -> void:
 	_request_loadout_sync()
 
 func _request_loadout_sync() -> void:

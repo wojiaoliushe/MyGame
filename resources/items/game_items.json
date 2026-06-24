@@ -10,21 +10,21 @@
 	"inherits": "weapon_base",
 	"name": "剑",
 	"image": "res://assets/generated/pixel_sword_frame_0.png",
-	"size": "Vector2i(1, 2)",
+	"size": "Vector2i(2, 1)",
 	"weapon_scene": "res://scenes/weapons/sword.tscn"
   },
   "weapons/poleaxe": {
 	"inherits": "weapon_base",
 	"name": "长柄斧",
 	"image": "res://assets/generated/poleaxe_horizontal_strict_frame_0.png",
-	"size": "Vector2i(1, 3)",
+	"size": "Vector2i(3, 1)",
 	"weapon_scene": "res://scenes/weapons/poleaxe.tscn"
   },
   "weapons/spear": {
 	"inherits": "weapon_base",
 	"name": "长矛",
 	"image": "res://assets/generated/spear_horizontal_strict_frame_0.png",
-	"size": "Vector2i(1, 4)",
+	"size": "Vector2i(4, 1)",
 	"weapon_scene": "res://scenes/weapons/spear.tscn"
   },
   "weapons/fire_ball": {
