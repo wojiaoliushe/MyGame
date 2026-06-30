@@ -7,6 +7,9 @@ class_name Sword
 @export var check_interval: float = 1.0
 @export var auto_attack_enabled: bool = true
 
+func _apply_weapon_stats() -> void:
+	damage = 10
+
 func _get_swing_arc_deg() -> float:
 	return swing_arc_deg
 

@@ -51,6 +51,7 @@ var _scene_retracted_blade_pos: Vector2 = Vector2.ZERO
 var _hitbox_offset_from_blade: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
+	_apply_weapon_stats()
 	_wielder = get_parent() as Node2D
 	if _wielder == null:
 		push_error("ThrustWeapon: 须作为 Player 等 Node2D 的子节点（%s）" % get_path())
@@ -153,7 +154,4 @@ func _try_hit_enemy(body: Node) -> void:
 	if _hit_instance_ids.has(id):
 		return
 	_hit_instance_ids[id] = true
-	if body.has_method("die"):
-		body.die()
-	else:
-		body.queue_free()
+	apply_damage_to(body)

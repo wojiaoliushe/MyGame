@@ -35,6 +35,7 @@ var _check_timer: float = 0.0
 var _next_check_wait: float = 0.0
 
 func _ready() -> void:
+	_apply_weapon_stats()
 	_wielder = get_parent() as Node2D
 	if _wielder == null:
 		push_error("SlashWeapon: 须作为 Player 等 Node2D 的子节点（%s）" % get_path())
@@ -118,7 +119,4 @@ func _try_hit_enemy(body: Node) -> void:
 	if _hit_instance_ids.has(id):
 		return
 	_hit_instance_ids[id] = true
-	if body.has_method("die"):
-		body.die()
-	else:
-		body.queue_free()
+	apply_damage_to(body)

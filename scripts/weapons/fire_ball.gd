@@ -8,6 +8,9 @@ class_name FireBall
 @export var max_range: float = 400.0
 @export var auto_shoot_enabled: bool = true
 
+func _apply_weapon_stats() -> void:
+	damage = 5
+
 func _get_projectile_scene() -> PackedScene:
 	return fire_ball_projectile_scene
 

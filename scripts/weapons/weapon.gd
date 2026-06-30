@@ -3,6 +3,19 @@ class_name Weapon
 
 ## 武器通用基类；具体逻辑由挥砍（SlashWeapon）、戳刺（ThrustWeapon）、远程（RangeWeapon）等子类实现。
 
+var damage: int = 0
+
+
+## 子类在此设置 damage 等数值
+func _apply_weapon_stats() -> void:
+	pass
+
+
+func apply_damage_to(body: Node) -> void:
+	if body.has_method("take_damage"):
+		body.take_damage(damage)
+
+
 func sample_next_attack_interval(base_seconds: float) -> float:
 	return base_seconds * randf_range(0.9, 1.1)
 

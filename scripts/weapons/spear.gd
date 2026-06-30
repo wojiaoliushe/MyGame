@@ -9,6 +9,9 @@ class_name Spear
 @export var check_interval: float = 1.2
 @export var auto_attack_enabled: bool = true
 
+func _apply_weapon_stats() -> void:
+	damage = 10
+
 func _get_thrust_duration() -> float:
 	return thrust_duration
 

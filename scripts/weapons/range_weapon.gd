@@ -18,6 +18,7 @@ var _shoot_timer: float = 0.0
 var _next_shoot_wait: float = 0.0
 
 func _ready() -> void:
+	_apply_weapon_stats()
 	_next_shoot_wait = sample_next_attack_interval(_get_shoot_interval())
 	set_physics_process(true)
 
@@ -62,3 +63,4 @@ func _fire_projectile(from: Node2D, target: Node2D) -> void:
 	projectile.global_position = from.global_position
 	projectile.global_rotation = angle
 	projectile.set("direction", dir)
+	projectile.set("damage", damage)

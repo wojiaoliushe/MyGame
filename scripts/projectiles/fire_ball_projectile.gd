@@ -3,6 +3,7 @@ class_name FireBallProjectile
 
 @export var speed: float = 400.0
 var direction: Vector2 = Vector2.ZERO
+var damage: int = 0
 
 func _ready() -> void:
 	# 2秒后自动销毁，防止火球弹体无限飞行
@@ -16,10 +17,8 @@ func _on_body_entered(body: Node) -> void:
 		return
 
 	if body.is_in_group("enemies"):
-		if body.has_method("die"):
-			body.die()
-		else:
-			body.queue_free()
+		if body.has_method("take_damage"):
+			body.take_damage(damage)
 
 	# 击中敌人或墙壁等任意物体后销毁
 	queue_free()
