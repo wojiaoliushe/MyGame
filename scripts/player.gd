@@ -16,12 +16,16 @@ var _iframes_remaining: float = 0.0
 func _ready() -> void:
 	health = max_health
 	health_changed.emit(health)
-	if has_node("Camera2D"):
-		var camera: Camera2D = $Camera2D
-		camera.limit_left = 0
-		camera.limit_top = 0
-		camera.limit_right = int(LevelConfig.MAP_WIDTH)
-		camera.limit_bottom = int(LevelConfig.MAP_HEIGHT)
+
+
+func configure_camera(map_size: Vector2) -> void:
+	if not has_node("Camera2D"):
+		return
+	var camera: Camera2D = $Camera2D
+	camera.limit_left = 0
+	camera.limit_top = 0
+	camera.limit_right = int(map_size.x)
+	camera.limit_bottom = int(map_size.y)
 
 func _physics_process(delta: float) -> void:
 	# 获取输入向量 (支持箭头键和 WASD)

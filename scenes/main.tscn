@@ -2,19 +2,18 @@
 
 [ext_resource type="Script" uid="uid://bcf8uq73xrmhm" path="res://scripts/main.gd" id="1_main_gd"]
 [ext_resource type="PackedScene" uid="uid://dga2xs23iwq6l" path="res://scenes/player/player.tscn" id="2_player_scene"]
-[ext_resource type="Texture2D" path="res://assets/generated/bg_level_grass.png" id="3_bg"]
+[ext_resource type="Resource" path="res://resources/levels/level_grass.tres" id="3_level_grass"]
+[ext_resource type="Script" path="res://scripts/level/level_runtime.gd" id="4_level_runtime"]
 [ext_resource type="PackedScene" uid="uid://cbackpackpanel01" path="res://scenes/ui/backpack_panel.tscn" id="5_backpack_panel"]
 
 [node name="Main" type="Node2D" unique_id=2110118895]
 script = ExtResource("1_main_gd")
+level_data = ExtResource("3_level_grass")
 
-[node name="Background" type="Sprite2D" parent="." unique_id=1983267731]
-z_index = -10
-texture = ExtResource("3_bg")
-centered = false
+[node name="LevelRuntime" type="Node" parent="." unique_id=1983267732]
+script = ExtResource("4_level_runtime")
 
 [node name="Player" parent="." unique_id=1164950548 instance=ExtResource("2_player_scene")]
-position = Vector2(1338, 797)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=57803599]
 

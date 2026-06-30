@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="LevelData" format=3 uid="uid://dy5fuadeuv20o"]
+
+[ext_resource type="Script" uid="uid://cmx3uw86pli0u" path="res://scripts/level/level_data.gd" id="1_level_data"]
+[ext_resource type="Texture2D" uid="uid://cr0gh4jsb183k" path="res://assets/generated/bg_level_grass.png" id="2_bg"]
+[ext_resource type="Script" uid="uid://ojgs8y5qbw7o" path="res://scripts/level/spawn/grass/spawn_controller_grass.gd" id="3_spawn_controller"]
+
+[resource]
+script = ExtResource("1_level_data")
+id = "grass"
+display_name = "草地关卡"
+background = ExtResource("2_bg")
+map_size = Vector2(2732, 1534)
+play_rect = Rect2(513, 323, 1650, 947)
+play_margin = 48.0
+spawn_clearance = 16.0
+spawn_controller = ExtResource("3_spawn_controller")
