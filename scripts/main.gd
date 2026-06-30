@@ -2,12 +2,6 @@ extends Node2D
 
 var monster_scene: PackedScene = preload("res://scenes/enemies/monster.tscn")
 
-const MAP_WIDTH: float = 2560.0
-const MAP_HEIGHT: float = 1920.0
-const WALL_MARGIN: float = 32.0
-## 生成点与围墙内侧保持距离（与可走区域 clamp 一致，避免出生卡在墙里）
-const SPAWN_CLEARANCE: float = 16.0
-
 const INITIAL_SPAWN_INTERVAL: float = 1.0
 const SPAWN_INTERVAL_RAMP_EVERY_SEC: float = 10.0
 const SPAWN_INTERVAL_RAMP_FACTOR: float = 0.75
@@ -21,6 +15,7 @@ var _spawn_ramp_timer: Timer
 @onready var _backpack_panel: BackpackPanel = $BackpackPanel
 
 func _ready() -> void:
+	_setup_forest_collision()
 	_player.health_changed.connect(_on_player_health_changed)
 	_spawn_timer = Timer.new()
 	_spawn_timer.wait_time = INITIAL_SPAWN_INTERVAL
@@ -34,6 +29,49 @@ func _ready() -> void:
 	_spawn_ramp_timer.timeout.connect(_on_spawn_ramp_timer_timeout)
 	add_child(_spawn_ramp_timer)
 
+
+func _setup_forest_collision() -> void:
+	var bounds := StaticBody2D.new()
+	bounds.name = "ForestBounds"
+	bounds.collision_layer = 1
+	bounds.collision_mask = 0
+	add_child(bounds)
+	move_child(bounds, 0)
+
+	var play_top: float = LevelConfig.PLAY_TOP
+	var play_bottom: float = LevelConfig.PLAY_BOTTOM
+	var play_left: float = LevelConfig.PLAY_LEFT
+	var play_right: float = LevelConfig.PLAY_RIGHT
+	var map_w: float = LevelConfig.MAP_WIDTH
+	var map_h: float = LevelConfig.MAP_HEIGHT
+
+	_add_rect_collision(bounds, Vector2(map_w * 0.5, play_top * 0.5), Vector2(map_w, play_top))
+	_add_rect_collision(
+		bounds,
+		Vector2(map_w * 0.5, play_bottom + (map_h - play_bottom) * 0.5),
+		Vector2(map_w, map_h - play_bottom)
+	)
+	_add_rect_collision(
+		bounds,
+		Vector2(play_left * 0.5, (play_top + play_bottom) * 0.5),
+		Vector2(play_left, play_bottom - play_top)
+	)
+	_add_rect_collision(
+		bounds,
+		Vector2(play_right + (map_w - play_right) * 0.5, (play_top + play_bottom) * 0.5),
+		Vector2(map_w - play_right, play_bottom - play_top)
+	)
+
+
+func _add_rect_collision(body: StaticBody2D, center: Vector2, size: Vector2) -> void:
+	var shape := RectangleShape2D.new()
+	shape.size = size
+	var collider := CollisionShape2D.new()
+	collider.position = center
+	collider.shape = shape
+	body.add_child(collider)
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if not event is InputEventKey or not event.pressed or event.keycode != KEY_ESCAPE:
 		return
@@ -44,28 +82,32 @@ func _unhandled_input(event: InputEvent) -> void:
 	_backpack_panel.open()
 	get_viewport().set_input_as_handled()
 
+
 func _is_game_over_ui_visible() -> bool:
 	return $CanvasLayer/GameOverLabel.visible
 
+
 func _on_player_health_changed(current: int) -> void:
 	_health_label.text = str(current)
+
 
 func _on_spawn_ramp_timer_timeout() -> void:
 	var new_interval: float = maxf(_spawn_timer.wait_time * SPAWN_INTERVAL_RAMP_FACTOR, MIN_SPAWN_INTERVAL)
 	_spawn_timer.wait_time = new_interval
 	print("怪物生成间隔已更新: ", new_interval, " 秒")
 
+
 func _on_spawn_timer_timeout() -> void:
 	spawn_monster()
 
+
 func spawn_monster() -> void:
 	var monster: CharacterBody2D = monster_scene.instantiate()
-	var inner_left: float = WALL_MARGIN + SPAWN_CLEARANCE
-	var inner_right: float = MAP_WIDTH - WALL_MARGIN - SPAWN_CLEARANCE
-	var inner_top: float = WALL_MARGIN + SPAWN_CLEARANCE
-	var inner_bottom: float = MAP_HEIGHT - WALL_MARGIN - SPAWN_CLEARANCE
+	var inner_left: float = LevelConfig.play_inner_left() + LevelConfig.SPAWN_CLEARANCE
+	var inner_right: float = LevelConfig.play_inner_right() - LevelConfig.SPAWN_CLEARANCE
+	var inner_top: float = LevelConfig.play_inner_top() + LevelConfig.SPAWN_CLEARANCE
+	var inner_bottom: float = LevelConfig.play_inner_bottom() - LevelConfig.SPAWN_CLEARANCE
 
-	# 整张地图可走区域内边界上生成 (0: 上, 1: 下, 2: 左, 3: 右)
 	var edge: int = randi() % 4
 	var spawn_pos: Vector2
 	match edge:
@@ -82,13 +124,13 @@ func spawn_monster() -> void:
 	monster.global_position.y = clamp(spawn_pos.y, inner_top, inner_bottom)
 	add_child(monster)
 
+
 func trigger_game_over() -> void:
 	_backpack_panel.visible = false
 	var label: Label = $CanvasLayer/GameOverLabel
 	label.text = "GAME OVER"
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	# 居中显示
 	label.anchors_preset = Control.PRESET_CENTER
 	label.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	label.grow_vertical = Control.GROW_DIRECTION_BOTH

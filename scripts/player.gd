@@ -20,8 +20,8 @@ func _ready() -> void:
 		var camera: Camera2D = $Camera2D
 		camera.limit_left = 0
 		camera.limit_top = 0
-		camera.limit_right = 2560
-		camera.limit_bottom = 1920
+		camera.limit_right = int(LevelConfig.MAP_WIDTH)
+		camera.limit_bottom = int(LevelConfig.MAP_HEIGHT)
 
 func _physics_process(delta: float) -> void:
 	# 获取输入向量 (支持箭头键和 WASD)
