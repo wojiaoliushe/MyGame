@@ -6,7 +6,7 @@ var player: Node2D = null
 func _apply_stats() -> void:
 	max_hp = 10
 	speed = 100.0
-	attack_power = 1
+	attack_power = 5
 	health_bar_width = 44.0
 	health_bar_padding = 8.0
 

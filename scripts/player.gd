@@ -4,7 +4,7 @@ class_name Player
 signal health_changed(current: int)
 
 @export var speed: float = 300.0
-@export var max_health: int = 3
+@export var max_health: int = 100
 ## 受伤后的无敌时间，避免与怪物重叠时每帧多次扣血
 @export var invulnerability_duration: float = 0.75
 

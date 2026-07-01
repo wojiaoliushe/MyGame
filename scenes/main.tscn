@@ -29,7 +29,7 @@ offset_bottom = -12.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_font_sizes/font_size = 36
-text = "3"
+text = ""
 vertical_alignment = 1
 
 [node name="BackpackPanel" parent="." instance=ExtResource("5_backpack_panel")]

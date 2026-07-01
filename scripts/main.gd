@@ -19,6 +19,7 @@ func _ready() -> void:
 	_level_runtime.setup(self, level_data, _player)
 	_setup_spawn_controller()
 	_player.health_changed.connect(_on_player_health_changed)
+	_on_player_health_changed(_player.health)
 
 
 func _setup_spawn_controller() -> void:
