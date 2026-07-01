@@ -7,6 +7,8 @@ func _apply_stats() -> void:
 	max_hp = 10
 	speed = 100.0
 	attack_power = 1
+	health_bar_width = 44.0
+	health_bar_padding = 8.0
 
 
 func _ready() -> void:
