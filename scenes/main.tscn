@@ -34,20 +34,44 @@ vertical_alignment = 1
 
 [node name="BackpackPanel" parent="." instance=ExtResource("5_backpack_panel")]
 
-[node name="GameOverLabel" type="Label" parent="CanvasLayer" unique_id=730466300]
+[node name="GameOverOverlay" type="Control" parent="CanvasLayer" unique_id=730466299]
 visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -100.0
-offset_top = -25.0
-offset_right = 100.0
-offset_bottom = 25.0
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="CanvasLayer/GameOverOverlay" unique_id=730466298]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0, 0, 0, 0.65)
+
+[node name="Center" type="CenterContainer" parent="CanvasLayer/GameOverOverlay" unique_id=730466297]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="CanvasLayer/GameOverOverlay/Center" unique_id=730466296]
+theme_override_constants/separation = 32
+alignment = 1
+
+[node name="GameOverLabel" type="Label" parent="CanvasLayer/GameOverOverlay/Center/VBox" unique_id=730466300]
 theme_override_font_sizes/font_size = 64
 text = "GAME OVER"
 horizontal_alignment = 1
-vertical_alignment = 1
+
+[node name="BtnBackToStart" type="Button" parent="CanvasLayer/GameOverOverlay/Center/VBox" unique_id=730466295]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 48)
+theme_override_font_sizes/font_size = 28
+text = "回到开始界面"

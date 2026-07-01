@@ -6,6 +6,10 @@ extends Node2D
 @onready var _level_runtime: LevelRuntime = $LevelRuntime
 @onready var _health_label: Label = $CanvasLayer/HealthLabel
 @onready var _backpack_panel: BackpackPanel = $BackpackPanel
+@onready var _game_over_overlay: Control = $CanvasLayer/GameOverOverlay
+@onready var _btn_back_to_start: Button = %BtnBackToStart
+
+const START_MENU_SCENE_PATH := "res://scenes/ui/start_menu.tscn"
 
 var _spawn_controller: SpawnController
 
@@ -20,6 +24,8 @@ func _ready() -> void:
 	_setup_spawn_controller()
 	_player.health_changed.connect(_on_player_health_changed)
 	_on_player_health_changed(_player.health)
+	_set_pause_immune_process(_game_over_overlay)
+	_btn_back_to_start.pressed.connect(_on_back_to_start_pressed)
 
 
 func _setup_spawn_controller() -> void:
@@ -46,7 +52,13 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _is_game_over_ui_visible() -> bool:
-	return $CanvasLayer/GameOverLabel.visible
+	return _game_over_overlay.visible
+
+
+func _set_pause_immune_process(n: Node) -> void:
+	n.process_mode = Node.PROCESS_MODE_ALWAYS
+	for c: Node in n.get_children():
+		_set_pause_immune_process(c)
 
 
 func _on_player_health_changed(current: int) -> void:
@@ -57,12 +69,10 @@ func trigger_game_over() -> void:
 	if _spawn_controller != null:
 		_spawn_controller.stop()
 	_backpack_panel.visible = false
-	var label: Label = $CanvasLayer/GameOverLabel
-	label.text = "GAME OVER"
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.anchors_preset = Control.PRESET_CENTER
-	label.grow_horizontal = Control.GROW_DIRECTION_BOTH
-	label.grow_vertical = Control.GROW_DIRECTION_BOTH
-	label.visible = true
+	_game_over_overlay.visible = true
 	get_tree().paused = true
+
+
+func _on_back_to_start_pressed() -> void:
+	get_tree().paused = false
+	get_tree().change_scene_to_file(START_MENU_SCENE_PATH)
