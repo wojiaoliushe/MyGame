@@ -2,7 +2,7 @@
 extends CtrlInventoryGrid
 class_name MyGameCtrlInventoryGrid
 
-const _MyCtrlInventoryGridBasic = preload("res://scripts/ui/ctrl_inventory_grid_basic_mygame.gd")
+const _MyCtrlInventoryGridBasic = preload("res://scripts/ui/backpack/ctrl_inventory_grid_basic_mygame.gd")
 
 func _ready() -> void:
 	_background = CustomizablePanel.new()

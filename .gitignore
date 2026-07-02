@@ -2,6 +2,9 @@
 .godot/
 /android/
 
+# macOS
+.DS_Store
+
 # 可选本地密钥（勿提交）
 .env
 .env.*

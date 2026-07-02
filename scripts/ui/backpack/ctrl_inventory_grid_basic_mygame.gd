@@ -1,6 +1,6 @@
 extends "res://addons/gloot/ui/ctrl_inventory_grid_basic.gd"
 
-const _CtrlDraggableGridPreview = preload("res://scripts/ui/ctrl_draggable_inventory_item_grid_preview.gd")
+const _CtrlDraggableGridPreview = preload("res://scripts/ui/backpack/ctrl_draggable_inventory_item_grid_preview.gd")
 
 func _populate_list() -> void:
 	var grid_constraint: GridConstraint = inventory.get_constraint(GridConstraint)
