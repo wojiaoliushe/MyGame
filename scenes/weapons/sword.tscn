@@ -24,5 +24,3 @@ monitorable = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=953812848]
 position = Vector2(59, 0)
 shape = SubResource("Sword_blade_shape")
-
-[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]
